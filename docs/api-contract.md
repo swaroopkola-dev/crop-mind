@@ -1,0 +1,1 @@
+File content is in the downloadable CropMind frontend ZIP; this remote stub will be replaced by the batched source commit.
