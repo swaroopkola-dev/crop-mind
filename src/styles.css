@@ -46,3 +46,32 @@
 .landing-footer{max-width:1240px;margin:0 auto;padding:24px 32px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid #e3e8dc}.landing-footer .landing-brand{font-size:17px}.landing-footer .landing-brand-mark{width:36px;height:36px;border-radius:12px}.landing-footer>span{font-size:10px;color:#879084}.landing-footer>div{display:flex;gap:20px}.landing-footer>div a{font-size:10px;font-weight:700;color:#5c6f5c;text-decoration:none}
 @media(max-width:900px){.landing-hero{grid-template-columns:1fr;padding-top:45px;gap:30px}.landing-hero-copy{max-width:720px}.landing-hero-art{height:390px;max-width:680px;width:100%;margin:0 auto}.landing-hero-note{position:relative;bottom:auto;right:auto;max-width:none;width:100%;grid-column:1;margin-top:-12px}.landing-ribbon{margin:0 24px;gap:18px;padding:22px 0}.landing-ribbon small{font-size:9px}.landing-bottom-cta{margin-left:24px;margin-right:24px;padding:35px}}
 @media(max-width:640px){.landing-nav{width:calc(100% - 24px);margin:10px auto 0;padding:11px 14px;top:8px;border-radius:16px;gap:12px}.landing-menu-toggle{display:grid;place-items:center}.landing-links{display:none;position:absolute;top:calc(100% + 10px);left:0;right:0;padding:17px;background:#fff;border:1px solid #e3e8dc;border-radius:16px;box-shadow:0 18px 40px #243d271a;align-items:stretch;gap:17px}.landing-links-open{display:flex;flex-direction:column}.landing-links .landing-nav-cta{justify-content:center}.landing-hero{padding:38px 20px 45px;gap:24px;min-height:0}.landing-hero h1{font-size:43px;letter-spacing:-2.1px;margin-top:20px}.landing-lede{font-size:14px;line-height:1.8}.landing-hero-actions{gap:15px;margin-top:23px}.landing-primary-cta{width:100%;justify-content:center}.landing-proof{gap:11px 15px;margin-top:24px}.landing-proof span{font-size:9px}.landing-hero-art{height:320px;border-radius:23px}.landing-art-sun{width:54px;height:54px;right:40px;top:35px}.landing-insight-top{top:17px;left:14px;padding:10px}.landing-insight-bottom{right:12px;bottom:30px;padding:11px}.landing-art-leaf-one{left:40%;top:41%}.landing-art-caption{left:15px;bottom:14px;font-size:7px}.landing-hero-note{padding:11px;margin-top:-5px}.landing-ribbon{grid-template-columns:1fr;margin:0 20px;padding:22px 0;gap:17px}.landing-ribbon small{font-size:10px}.landing-how{padding:68px 20px 70px}.landing-section-heading{margin-bottom:28px}.landing-section-heading h2{font-size:36px}.landing-feature-grid{grid-template-columns:1fr;gap:13px}.landing-feature{min-height:0;padding:22px}.landing-feature h3{margin-top:16px}.landing-bottom-cta{margin:0 20px 45px;padding:28px 23px;align-items:flex-start;flex-direction:column;gap:22px}.landing-bottom-cta h2{font-size:34px}.landing-footer{padding:22px 20px 28px;align-items:flex-start;flex-wrap:wrap}.landing-footer>span{order:3;width:100%;line-height:1.6}.landing-footer>div{margin-left:auto;align-self:center}}
+
+
+/* Viewport-fit safeguards: prevent wide content from pushing the page off-screen. */
+html,body,#root{width:100%;min-width:0;max-width:100%}
+body{overflow-x:clip}
+.app-shell,.main-panel,.page-content,.page-stack,.landing{min-width:0;max-width:100%}
+.main-panel{width:calc(100% - 252px)}
+.page-content>*{min-width:0}
+.card,.content-grid>*, .results-grid>*, .form-layout>*, .landing-hero>*, .landing-feature-grid>*{min-width:0}
+img,video,canvas,svg{max-width:100%}
+table{max-width:100%}
+@media(max-width:960px){.main-panel{width:100%}}
+@media(max-width:640px){
+  .topbar{max-width:calc(100vw - 18px)}
+  .landing-nav{max-width:calc(100vw - 24px)}
+  .landing-hero h1{font-size:clamp(35px,10vw,43px);overflow-wrap:anywhere}
+  .landing-section-heading h2,.landing-bottom-cta h2{overflow-wrap:anywhere}
+  .page-content{padding-left:12px;padding-right:12px}
+  .page-heading,.section-intro,.section-title-row,.card-head{min-width:0}
+  .table-wrap,.table-container{max-width:100%;overflow-x:auto}
+}
+@media(max-width:360px){
+  .landing-brand{font-size:17px;gap:7px}
+  .landing-brand-mark{width:36px;height:36px}
+  .landing-nav{padding:9px 10px;gap:8px}
+  .topbar{padding:0 9px;gap:6px}
+  .top-actions{gap:4px}
+  .landing-hero{padding-left:15px;padding-right:15px}
+}
