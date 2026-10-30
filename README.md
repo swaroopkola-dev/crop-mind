@@ -1,54 +1,113 @@
-# CropMind frontend
+# CropMind
 
-## 1. Project overview
-CropMind is a responsive React single-page application for exploring crop suitability using soil, nutrients, climate and season information.
+CropMind is a responsive React application for exploring crop suitability from soil, nutrient, climate and season information.
 
-## 2. Live applications
-- Frontend: https://crop-mind-rouge.vercel.app
-- Backend: https://crop-mind-api.vercel.app
-- API docs: https://crop-mind-api.vercel.app/docs
+## Applications
 
-## 3. Product capabilities
-Landing page, dashboard, recommendations, ranked results, comparison, saved history, authentication, methodology, admin console, CSV exports, theme switching and print view.
+- **Frontend:** https://crop-mind-rouge.vercel.app
+- **API:** https://crop-mind-api.vercel.app
+- **API reference:** https://crop-mind-api.vercel.app/docs
 
-## 4. Technology stack
-React 18, Vite, React Router, Tailwind CSS, lucide-react, Recharts and Framer Motion. Hosted as a Vercel single-page application.
+## Features
 
-## 5. Routes
-/, /dashboard, /recommend, /results, /compare, /history, /login, /register, /about, /admin, /admin/users, /admin/recommendations, /admin/crops, /admin/activity, /admin/health, /admin/demo, /admin/settings, plus a not-found route.
+- Crop recommendations with ranked results and factor explanations
+- Crop comparison, saved recommendation history and printable reports
+- Guest recommendation flow and account authentication
+- Administrator console for users, recommendations, crop profiles, activity, health and settings
+- CSV exports, light/dark theme and responsive layouts
 
-## 6. Getting started
-Use Node.js 20 or newer. Run npm install, npm run lint, npm run build and npm run dev.
+## Technology
 
-## 7. Configuration
-Set VITE_API_BASE_URL (including /api), VITE_LIVE_POLL_INTERVAL_MS and VITE_APP_NAME in Vercel. Vite values are public browser values; never put database credentials, model keys, JWT secrets, admin passwords or seed tokens in VITE_* variables.
+- React 18 and React Router
+- Vite 6
+- Tailwind CSS
+- Recharts, Framer Motion and lucide-react
+- Vercel hosting
 
-## 8. API communication
-A shared request helper in src/main.jsx handles JSON requests, bearer authorization, credentials-included calls, API errors and one refresh retry after 401. The API base is configured by VITE_API_BASE_URL.
+## Requirements
 
-## 9. Authentication and route guards
-The application context restores the user through /auth/me and keeps the access token for the browser session. Expired requests retry through /auth/refresh. Refresh cookies are HttpOnly and rotated by the API. User routes require authentication; admin pages check the admin role and the API independently enforces 403 for non-admins.
+- Node.js 20 or newer
+- npm
 
-## 10. Recommendation workflow
-The form validates soil type, pH, rainfall, temperature, humidity and season against the API contract. N/P/K are optional and use kg/ha. A sample profile and completeness indicator are provided. Ranked results require active crop profiles in the API dataset.
+## Local development
 
-## 11. Results and explanation
-Results show ranked crops, score, confidence/completeness, strengths, weaknesses, factor breakdown and explanation. Explanations are labelled AI-generated (Gemini) or generated from rules (fallback). Users can save results after signing in and print the report.
+Install dependencies and start the Vite development server:
 
-## 12. Comparison and history
-Compare supports two to four crop profiles and renders API-backed charts and factor tables. Signed-in users can revisit and remove saved recommendations.
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
 
-## 13. Administrator console
-Views cover overview, users, recommendations, crop dataset, activity, system health, demo controls and settings. User changes, session revocation and guarded account removal use admin APIs. CSV exports are API-backed; crop removal is a soft deactivation.
+The app is available at the local URL printed by Vite. Useful checks:
 
-## 14. Live data and polling
-The dashboard uses the API summary and ETag conditional requests. Polling pauses while the tab is hidden and retries with backoff after failures. The admin overview chart uses live API activity; illustrative charts are labelled Demo data.
+```bash
+npm run lint
+npm run build
+npm run preview
+```
 
-## 15. Styling, accessibility and print
-Warm agricultural palette, rounded cards, responsive layouts, light/dark theme, labelled controls, loading and empty states, status messages and print stylesheet. Print output includes the advisory disclaimer.
+## Environment configuration
 
-## 16. Demo-only credentials
-No shared demo username or password is published or embedded in the frontend. A dedicated demo administrator must be provisioned privately by the operator. Never put real administrator credentials in source code or public docs.
+Copy `.env.example` to `.env` and adjust the public frontend settings when needed.
 
-## 17. Limitations and advisory disclaimer
-The crop library contains approximate educational data. Scores are relative suitability heuristics, not yield estimates or probabilities. Recommendations require an active crop dataset. Verify results with current soil tests and qualified local agronomic advice before planting.
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `VITE_API_BASE_URL` | API base URL; include the `/api` path | `https://crop-mind-api.vercel.app/api` |
+| `VITE_LIVE_POLL_INTERVAL_MS` | Dashboard polling interval in milliseconds; minimum is 5,000 | `15000` |
+| `VITE_APP_NAME` | Browser document title prefix | `CropMind` |
+
+Only values intended to be visible in the browser belong in `VITE_*` variables. Never put database connection strings, model API keys, JWT secrets, administrator passwords or seed tokens in frontend environment variables.
+
+For Vercel, configure these variables in the frontend project settings for the required deployment environments.
+
+## Application structure
+
+The current frontend is intentionally a small Vite application with a single main entry module:
+
+- `index.html` — document shell and browser metadata
+- `src/main.jsx` — application bootstrap, API client, app context, routing, pages and admin views
+- `src/styles.css` — global styles, components and responsive layouts
+- `vite.config.js` — Vite configuration
+- `eslint.config.js` — ESLint flat configuration
+- `vercel.json` — SPA route rewrite
+- `.env.example` — public frontend environment template
+
+The main module currently combines several responsibilities. Splitting it into focused components, hooks and API modules is a worthwhile follow-up refactor; avoid moving code without running the lint and production build checks.
+
+## Routes
+
+| Route | Purpose |
+| --- | --- |
+| `/` | Marketing landing page |
+| `/dashboard` | Signed-in overview |
+| `/recommend` | Recommendation form |
+| `/results` | Ranked recommendation results |
+| `/compare` | Crop comparison |
+| `/history` | Saved recommendations |
+| `/login`, `/register` | Account access |
+| `/about` | Methodology and limitations |
+| `/admin` and `/admin/*` | Administrator console |
+
+The dashboard and administrator routes have frontend route guards. The API remains responsible for enforcing authorization; frontend guards are not a security boundary.
+
+## API and authentication
+
+The shared request helper in `src/main.jsx` sends JSON requests to `VITE_API_BASE_URL`, includes credentials, attaches the browser-session access token when available and attempts one refresh after an eligible 401 response. The API manages HttpOnly refresh cookies and enforces administrator permissions independently.
+
+The recommendation form validates its soil, nutrient, rainfall, temperature, humidity and season inputs against the API contract. Nitrogen, phosphorus and potassium are optional and expressed in kg/ha. Recommendations require active crop profiles in the API dataset.
+
+## Live data
+
+The dashboard summary uses conditional ETag requests. Polling pauses while the browser tab is hidden and backs off after failures. The administrator activity chart is based on API activity records; explicitly labelled demo charts are illustrative only.
+
+## Security and demo operation
+
+- No shared demo administrator credentials are embedded in the frontend or published here.
+- Provision administrator accounts privately through the backend's documented operator workflow.
+- Never commit `.env` files or secrets.
+- The administrator console exposes operational actions; use them only with an authorized administrator account.
+
+## Data limitations and advisory
+
+The crop library contains approximate educational profiles. Suitability scores are relative heuristics, not yield estimates, probabilities or guarantees. Weather, soil tests, crop profiles and local management practices can vary. Verify recommendations with current soil analysis and qualified local agronomic advice before making planting decisions.

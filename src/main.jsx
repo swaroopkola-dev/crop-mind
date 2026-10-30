@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Link, NavLink, Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -44,18 +44,11 @@ async function request(path, { method = 'GET', body, headers = {}, auth = true, 
   }
   return data;
 }
-const pathFor = (name) => '/' + name.replace(/^\//, '');
 const fmt = (n) => typeof n === 'number' ? n.toLocaleString() : n ?? '—';
-const num = (n, unit = '') => n === '' || n === null || n === undefined ? null : Number(n) + (unit ? ' ' + unit : '');
 const sampleProfile = { soil_type: 'loamy', ph: '6.5', nitrogen: '95', phosphorus: '42', potassium: '45', rainfall_mm: '720', temperature_c: '25', humidity_pct: '65', season: 'Rabi' };
 const factors = [
   ['soil_type','Soil type',''], ['ph','Soil pH',''], ['nitrogen','Nitrogen','kg/ha'], ['phosphorus','Phosphorus','kg/ha'], ['potassium','Potassium','kg/ha'],
   ['rainfall_mm','Rainfall','mm'], ['temperature_c','Temperature','°C'], ['humidity_pct','Humidity','%'], ['season','Season','']
-];
-const quickDemo = [
-  { crop_name: 'Rice', score: 92, category: 'Excellent fit', confidence: { completeness_pct: 100, label: 'High' }, strengths: ['Rainfall range aligns', 'Warm climate is suitable'], weaknesses: [] },
-  { crop_name: 'Maize', score: 84, category: 'Strong fit', confidence: { completeness_pct: 100, label: 'High' }, strengths: ['pH in accepted range'], weaknesses: ['Rainfall near upper range'] },
-  { crop_name: 'Groundnut', score: 77, category: 'Good fit', confidence: { completeness_pct: 100, label: 'High' }, strengths: ['Season can fit'], weaknesses: ['Soil moisture should be monitored'] }
 ];
 const demoTrend = [{day:'Mon',n:18},{day:'Tue',n:24},{day:'Wed',n:21},{day:'Thu',n:34},{day:'Fri',n:29},{day:'Sat',n:42},{day:'Sun',n:38}];
 
