@@ -141,7 +141,7 @@ function Disclaimer(){return <div className="disclaimer"><ShieldCheck size={17}/
 function LandingPage(){
   const {user}=useApp();
   const [mobileMenu,setMobileMenu]=useState(false);
-  const goToApp=user?'/dashboard':'/recommend';
+  const goToApp=user?'/dashboard':'/login';
   const features=[
     {icon:FlaskConical,n:'01',title:'Start with your soil',text:'Bring together soil type, pH, N-P-K nutrients and field conditions in one clear profile.'},
     {icon:BarChart3,n:'02',title:'See why crops fit',text:'Compare suitability scores and the factors that help or limit each crop for your field.'},
@@ -155,7 +155,7 @@ function LandingPage(){
         <a href="#how-it-works" onClick={()=>setMobileMenu(false)}>How it works</a><a href="#why-cropmind" onClick={()=>setMobileMenu(false)}>Why CropMind</a>
         <Link to="/about" onClick={()=>setMobileMenu(false)}>Our approach</Link>
         <Link className="landing-signin" to={user?'/dashboard':'/login'} onClick={()=>setMobileMenu(false)}>{user?'Workspace':'Sign in'}</Link>
-        <Link className="button button-primary landing-nav-cta" to={goToApp} onClick={()=>setMobileMenu(false)}>Explore CropMind <ArrowRight size={16}/></Link>
+        <Link className="button button-primary landing-nav-cta" to={goToApp} onClick={()=>setMobileMenu(false)}>{user?'Open workspace':'Sign in to explore'} <ArrowRight size={16}/></Link>
       </nav>
     </header>
     <main>
@@ -164,7 +164,7 @@ function LandingPage(){
           <div className="landing-eyebrow"><span className="landing-live-dot"/> SMARTER DECISIONS START BELOW THE SURFACE</div>
           <h1>Grow with clarity.<br/><em>Choose with confidence.</em></h1>
           <p className="landing-lede">Turn soil, nutrients and climate information into a crop shortlist you can understand. CropMind helps you explore what may fit your field—and why.</p>
-          <div className="landing-hero-actions"><Link to={goToApp} className="button button-primary landing-primary-cta">Find suitable crops <ArrowRight size={17}/></Link><a className="landing-secondary-cta" href="#how-it-works"><span className="landing-play"><ArrowRight size={13}/></span> See how it works</a></div>
+          <div className="landing-hero-actions"><Link to={goToApp} className="button button-primary landing-primary-cta">{user?'Open your workspace':'Sign in to get started'} <ArrowRight size={17}/></Link><a className="landing-secondary-cta" href="#how-it-works"><span className="landing-play"><ArrowRight size={13}/></span> See how it works</a></div>
           <div className="landing-proof"><span><CheckCircle2 size={16}/> Explainable crop scoring</span><span><CheckCircle2 size={16}/> Soil and climate factors</span><span><CheckCircle2 size={16}/> Compare alternatives</span></div>
         </div>
         <div className="landing-hero-art" aria-label="Illustration of cultivated fields and crop suitability insights">
