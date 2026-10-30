@@ -1,33 +1,54 @@
- # CropMind frontend
-React + Vite SPA for the CropMind crop-suitability API.
+# CropMind frontend
 
-## Features
-- Responsive dashboard with API-fed crop catalog and operational summary metrics.
-- Field profile form covering soil, pH, N-P-K nutrients, rainfall, temperature, humidity and season.
-- Ranked suitability results, confidence/completeness display, factor contribution explanations, print stylesheet.
-- Crop comparison, user authentication, recommendation history, methodology and limitations.
-- Admin views for overview, users, recommendations, crop catalog, activity, AI/system health, demo actions and settings.
-- Light/dark theme, mobile navigation, polling with ETag support, hidden-tab pause and retry backoff.
-- All demonstration trend data is labelled. Live KPI values are fetched from the API; no fabricated API counts.
+## 1. Project overview
+CropMind is a responsive React single-page application for exploring crop suitability using soil, nutrients, climate and season information.
 
-## Configuration
-Set VITE_API_BASE_URL (API base including /api), VITE_LIVE_POLL_INTERVAL_MS (default 15000), and VITE_APP_NAME. Never place database credentials, access secrets, model API keys, administrator passwords or seed tokens in VITE_* variables. Vite values are public in the browser bundle.
+## 2. Live applications
+- Frontend: https://crop-mind-rouge.vercel.app
+- Backend: https://crop-mind-api.vercel.app
+- API docs: https://crop-mind-api.vercel.app/docs
 
-## Development
-Requires Node.js 20 or newer.
+## 3. Product capabilities
+Landing page, dashboard, recommendations, ranked results, comparison, saved history, authentication, methodology, admin console, CSV exports, theme switching and print view.
 
-    npm install
-    npm run lint
-    npm run build
-    npm run dev
+## 4. Technology stack
+React 18, Vite, React Router, Tailwind CSS, lucide-react, Recharts and Framer Motion. Hosted as a Vercel single-page application.
 
-## Routes
-/, /recommend, /results, /compare, /history, /login, /register, /about, and /admin with nested administration pages. The Vercel SPA rewrite is configured in vercel.json.
+## 5. Routes
+/, /dashboard, /recommend, /results, /compare, /history, /login, /register, /about, /admin, /admin/users, /admin/recommendations, /admin/crops, /admin/activity, /admin/health, /admin/demo, /admin/settings, plus a not-found route.
 
-## API and deployment notes
-The UI uses the API contract and surfaces API errors rather than silently reporting a successful operation. Authentication and admin access must always be enforced by the API. Client-side route checks are usability controls only. Browser requests require the backend CORS origin to allow the deployed frontend; ETag polling also requires ETag to be exposed by CORS.
+## 6. Getting started
+Use Node.js 20 or newer. Run npm install, npm run lint, npm run build and npm run dev.
 
-Do not link this repository to a new Vercel project or deploy until the account deployment quota has reset and release is explicitly approved.
+## 7. Configuration
+Set VITE_API_BASE_URL (including /api), VITE_LIVE_POLL_INTERVAL_MS and VITE_APP_NAME in Vercel. Vite values are public browser values; never put database credentials, model keys, JWT secrets, admin passwords or seed tokens in VITE_* variables.
 
-## Agronomic disclaimer
-Suitability scores are comparative heuristics, not guarantees, yield predictions or probabilities of success. Validate the results with a current soil test and qualified local agronomist before making agricultural decisions.
+## 8. API communication
+A shared request helper in src/main.jsx handles JSON requests, bearer authorization, credentials-included calls, API errors and one refresh retry after 401. The API base is configured by VITE_API_BASE_URL.
+
+## 9. Authentication and route guards
+The application context restores the user through /auth/me and keeps the access token for the browser session. Expired requests retry through /auth/refresh. Refresh cookies are HttpOnly and rotated by the API. User routes require authentication; admin pages check the admin role and the API independently enforces 403 for non-admins.
+
+## 10. Recommendation workflow
+The form validates soil type, pH, rainfall, temperature, humidity and season against the API contract. N/P/K are optional and use kg/ha. A sample profile and completeness indicator are provided. Ranked results require active crop profiles in the API dataset.
+
+## 11. Results and explanation
+Results show ranked crops, score, confidence/completeness, strengths, weaknesses, factor breakdown and explanation. Explanations are labelled AI-generated (Gemini) or generated from rules (fallback). Users can save results after signing in and print the report.
+
+## 12. Comparison and history
+Compare supports two to four crop profiles and renders API-backed charts and factor tables. Signed-in users can revisit and remove saved recommendations.
+
+## 13. Administrator console
+Views cover overview, users, recommendations, crop dataset, activity, system health, demo controls and settings. User changes, session revocation and guarded account removal use admin APIs. CSV exports are API-backed; crop removal is a soft deactivation.
+
+## 14. Live data and polling
+The dashboard uses the API summary and ETag conditional requests. Polling pauses while the tab is hidden and retries with backoff after failures. The admin overview chart uses live API activity; illustrative charts are labelled Demo data.
+
+## 15. Styling, accessibility and print
+Warm agricultural palette, rounded cards, responsive layouts, light/dark theme, labelled controls, loading and empty states, status messages and print stylesheet. Print output includes the advisory disclaimer.
+
+## 16. Demo-only credentials
+No shared demo username or password is published or embedded in the frontend. A dedicated demo administrator must be provisioned privately by the operator. Never put real administrator credentials in source code or public docs.
+
+## 17. Limitations and advisory disclaimer
+The crop library contains approximate educational data. Scores are relative suitability heuristics, not yield estimates or probabilities. Recommendations require an active crop dataset. Verify results with current soil tests and qualified local agronomic advice before planting.
