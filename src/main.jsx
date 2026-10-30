@@ -316,7 +316,33 @@ function AdminSettings(){const [settings,setSettings]=useState({registration_ena
 function AdminDemo(){const {notify}=useApp();const [busy,setBusy]=useState(false);const {data,loading,error}=useAdminData('/admin/settings');const enabled=Boolean((data?.items||[]).find(item=>item.key==='simulator_enabled')?.value);async function toggle(){if(!window.confirm(`${enabled?'Disable':'Enable'} the simulator?`))return;setBusy(true);try{await request(`/admin/simulator/toggle?enabled=${!enabled}`,{method:'POST'});notify(`Simulator ${enabled?'disabled':'enabled'}`);window.location.reload();}catch(e){notify(e.message,'error')}finally{setBusy(false)}}async function tick(){if(!window.confirm('Generate synthetic recommendation records and matching activity entries?'))return;setBusy(true);try{const result=await request('/admin/simulator/tick',{method:'POST'});notify(`Simulator generated ${result?.generated??0} records`);}catch(e){notify(e.message,'error')}finally{setBusy(false)}}async function purge(){if(!window.confirm('Purge synthetic demo records only? Real user and recommendation records are preserved.'))return;setBusy(true);try{const result=await request('/admin/synthetic/purge',{method:'POST'});notify('Synthetic demo records purged');console.info('Synthetic purge counts',result?.deleted_counts||{});}catch(e){notify(e.message,'error')}finally{setBusy(false)}}return <AdminLayout active="Demo controls"><Card><div className="card-head"><div><h3>Demo and simulator controls</h3><p>Simulator actions use the supported admin API. Generated records are marked synthetic.</p></div><span className="mini-pill"><ShieldCheck size={13}/> Admin required</span></div>{loading?<Loading/>:error?<div className="inline-alert"><AlertCircle size={16}/>{error}</div>:<div className="admin-action-grid"><div><Database/><b>Simulator</b><p>Current state: {enabled?'Enabled':'Disabled'}</p><Button variant="secondary" disabled={busy} onClick={toggle}>{enabled?'Disable simulator':'Enable simulator'}</Button><Button disabled={busy||!enabled} onClick={tick}>Run simulator</Button></div><div><RefreshCw/><b>Reset demo data</b><p>Purge synthetic demo records only. Real records are preserved.</p><Button variant="secondary" disabled={busy} onClick={purge}>Purge synthetic data</Button></div></div>}</Card></AdminLayout>;}
 function NotFound(){return <div className="not-found"><span>404</span><h1>Looks like this path wandered off.</h1><p>The page may have moved, or the link may be out of date.</p><Link className="button button-primary" to="/">Back to overview <ArrowRight size={16}/></Link></div>;}
 function RequireAuth({children}){const {user}=useApp();return user?children:<Navigate to="/login" replace/>;}
-function RequireAdmin({children}){const {user}=useApp();return !user?<Navigate to="/login" replace/>:user.role==='admin'?children:<Navigate to="/dashboard" replace/>;}
-function AppRoutes(){const {authLoading}=useApp();const location=useLocation();if(authLoading)return <div className="boot-screen"><span className="brand-mark"><Sprout size={26}/></span><Loading label="Preparing your workspace…"/></div>;if(location.pathname==='/')return <LandingPage/>;return <Shell><Routes><Route path="/dashboard" element={<RequireAuth><Home/></RequireAuth>}/><Route path="/recommend" element={<Recommend/>}/><Route path="/results" element={<Results/>}/><Route path="/compare" element={<Compare/>}/><Route path="/history" element={<HistoryPage/>}/><Route path="/about" element={<About/>}/><Route path="/login" element={<AuthPage/>}/><Route path="/register" element={<AuthPage mode="register"/>}/><Route path="/admin" element={<RequireAdmin><AdminOverview/></RequireAdmin>}/><Route path="/admin/users" element={<RequireAdmin><AdminTable type="users"/></RequireAdmin>}/><Route path="/admin/recommendations" element={<RequireAdmin><AdminTable type="recommendations"/></RequireAdmin>}/><Route path="/admin/crops" element={<RequireAdmin><AdminTable type="crops"/></RequireAdmin>}/><Route path="/admin/activity" element={<RequireAdmin><AdminTable type="activity"/></RequireAdmin>}/><Route path="/admin/health" element={<RequireAdmin><AdminHealth/></RequireAdmin>}/><Route path="/admin/demo" element={<RequireAdmin><AdminDemo/></RequireAdmin>}/><Route path="/admin/settings" element={<RequireAdmin><AdminSettings/></RequireAdmin>}/><Route path="*" element={<NotFound/>}/></Routes></Shell>;}
+function PublicOnly({children}){const {user}=useApp();return user?<Navigate to="/dashboard" replace/>:children;}
+function RequireAdmin({children}){const {user}=useApp();return !user?<Navigate to="/login" replace/>:user.role==='admin'||user.is_admin?children:<Navigate to="/dashboard" replace/>;}
+function AppRoutes(){
+  const {authLoading,user}=useApp();
+  const location=useLocation();
+  if(authLoading)return <div className="boot-screen"><span className="brand-mark"><Sprout size={26}/></span><Loading label="Preparing your workspace…"/></div>;
+  if(user && (location.pathname==='/' || location.pathname==='/login' || location.pathname==='/register'))return <Navigate to="/dashboard" replace/>;
+  if(location.pathname==='/')return <PublicOnly><LandingPage/></PublicOnly>;
+  return <Shell><Routes>
+    <Route path="/dashboard" element={<RequireAuth><Home/></RequireAuth>}/>
+    <Route path="/recommend" element={<RequireAuth><Recommend/></RequireAuth>}/>
+    <Route path="/results" element={<RequireAuth><Results/></RequireAuth>}/>
+    <Route path="/compare" element={<RequireAuth><Compare/></RequireAuth>}/>
+    <Route path="/history" element={<RequireAuth><HistoryPage/></RequireAuth>}/>
+    <Route path="/about" element={<RequireAuth><About/></RequireAuth>}/>
+    <Route path="/login" element={<PublicOnly><AuthPage/></PublicOnly>}/>
+    <Route path="/register" element={<PublicOnly><AuthPage mode="register"/></PublicOnly>}/>
+    <Route path="/admin" element={<RequireAdmin><AdminOverview/></RequireAdmin>}/>
+    <Route path="/admin/users" element={<RequireAdmin><AdminTable type="users"/></RequireAdmin>}/>
+    <Route path="/admin/recommendations" element={<RequireAdmin><AdminTable type="recommendations"/></RequireAdmin>}/>
+    <Route path="/admin/crops" element={<RequireAdmin><AdminTable type="crops"/></RequireAdmin>}/>
+    <Route path="/admin/activity" element={<RequireAdmin><AdminTable type="activity"/></RequireAdmin>}/>
+    <Route path="/admin/health" element={<RequireAdmin><AdminHealth/></RequireAdmin>}/>
+    <Route path="/admin/demo" element={<RequireAdmin><AdminDemo/></RequireAdmin>}/>
+    <Route path="/admin/settings" element={<RequireAdmin><AdminSettings/></RequireAdmin>}/>
+    <Route path="*" element={<NotFound/>}/>
+  </Routes></Shell>;
+}
 function App(){return <BrowserRouter><AppProvider><AppRoutes/></AppProvider></BrowserRouter>;}
 createRoot(document.getElementById('root')).render(<React.StrictMode><App/></React.StrictMode>);
