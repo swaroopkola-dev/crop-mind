@@ -8,9 +8,12 @@ CropMind is a responsive React application for exploring crop suitability from s
 - **API:** https://crop-mind-api.vercel.app
 - **API reference:** https://crop-mind-api.vercel.app/docs
 
+Both production Vercel deployments were verified as **Ready** on 30 October 2026. The latest frontend deployment is built from `main` commit `402f8d5ae9f449faba59acd80a66201f5f89fed6`; the API deployment is built from `main` commit `7a8655b6727fdd9189925126cc4a68e245d76c78`. The backend environment configuration is maintained in the [CropMind API repository](https://github.com/swaroopkola-dev/crop-mind-api).
+
 ## Features
 
 - Crop recommendations with ranked results and factor explanations
+- Refined responsive layout and navigation, including guest access restrictions and return navigation to sign-in
 - Crop comparison, saved recommendation history and printable reports
 - Guest recommendation flow and account authentication
 - Administrator console for users, recommendations, crop profiles, activity, health and settings
@@ -89,7 +92,7 @@ The dashboard and administrator routes have frontend route guards. The API remai
 
 ## API and authentication
 
-The shared request helper in `src/main.jsx` sends JSON requests to `VITE_API_BASE_URL`, includes credentials, attaches the browser-session access token when available and attempts one refresh after an eligible 401 response. The API manages HttpOnly refresh cookies and enforces administrator permissions independently.
+The shared request helper in `src/main.jsx` sends JSON requests to `VITE_API_BASE_URL`, includes credentials, attaches the browser-session access token when available and attempts one refresh after an eligible 401 response. The API manages HttpOnly refresh cookies and enforces administrator permissions independently. The production frontend is configured to use `https://crop-mind-api.vercel.app/api`; keep backend-only secrets in the API project's environment settings, never in this frontend repository.
 
 The recommendation form validates soil, nutrient, rainfall, temperature, humidity and season inputs against the API contract. Nitrogen, phosphorus and potassium are optional and expressed in kg/ha. Recommendations require active crop profiles in the API dataset.
 
