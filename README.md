@@ -31,15 +31,13 @@ CropMind is a responsive React application for exploring crop suitability from s
 
 ## Local development
 
-Install dependencies and start the Vite development server:
-
 ```bash
 npm install
 cp .env.example .env
 npm run dev
 ```
 
-The app is available at the local URL printed by Vite. Useful checks:
+Useful checks:
 
 ```bash
 npm run lint
@@ -49,7 +47,7 @@ npm run preview
 
 ## Environment configuration
 
-Copy `.env.example` to `.env` and adjust the public frontend settings when needed.
+Copy `.env.example` to `.env` and adjust public frontend settings when needed.
 
 | Variable | Purpose | Default |
 | --- | --- | --- |
@@ -59,11 +57,9 @@ Copy `.env.example` to `.env` and adjust the public frontend settings when neede
 
 Only values intended to be visible in the browser belong in `VITE_*` variables. Never put database connection strings, model API keys, JWT secrets, administrator passwords or seed tokens in frontend environment variables.
 
-For Vercel, configure these variables in the frontend project settings for the required deployment environments.
+For Vercel, configure these variables in the frontend project settings for the required deployment environments. Do not commit `.env` files or secrets.
 
 ## Application structure
-
-The current frontend is intentionally a small Vite application with a single main entry module:
 
 - `index.html` — document shell and browser metadata
 - `src/main.jsx` — application bootstrap, API client, app context, routing, pages and admin views
@@ -73,7 +69,7 @@ The current frontend is intentionally a small Vite application with a single mai
 - `vercel.json` — SPA route rewrite
 - `.env.example` — public frontend environment template
 
-The main module currently combines several responsibilities. Splitting it into focused components, hooks and API modules is a worthwhile follow-up refactor; avoid moving code without running the lint and production build checks.
+The main module currently combines several responsibilities. Splitting it into focused components, hooks and API modules is a worthwhile follow-up refactor; avoid moving code without running lint and production build checks.
 
 ## Routes
 
@@ -95,19 +91,15 @@ The dashboard and administrator routes have frontend route guards. The API remai
 
 The shared request helper in `src/main.jsx` sends JSON requests to `VITE_API_BASE_URL`, includes credentials, attaches the browser-session access token when available and attempts one refresh after an eligible 401 response. The API manages HttpOnly refresh cookies and enforces administrator permissions independently.
 
-The recommendation form validates its soil, nutrient, rainfall, temperature, humidity and season inputs against the API contract. Nitrogen, phosphorus and potassium are optional and expressed in kg/ha. Recommendations require active crop profiles in the API dataset.
+The recommendation form validates soil, nutrient, rainfall, temperature, humidity and season inputs against the API contract. Nitrogen, phosphorus and potassium are optional and expressed in kg/ha. Recommendations require active crop profiles in the API dataset.
 
 ## Live data
 
 The dashboard summary uses conditional ETag requests. Polling pauses while the browser tab is hidden and backs off after failures. The administrator activity chart is based on API activity records; explicitly labelled demo charts are illustrative only.
 
-## Security and demo operation
+## Security and advisory
 
-- No shared demo administrator credentials are embedded in the frontend or published here.
+- Do not publish `.env` files or secrets.
 - Provision administrator accounts privately through the backend's documented operator workflow.
-- Never commit `.env` files or secrets.
 - The administrator console exposes operational actions; use them only with an authorized administrator account.
-
-## Data limitations and advisory
-
-The crop library contains approximate educational profiles. Suitability scores are relative heuristics, not yield estimates, probabilities or guarantees. Weather, soil tests, crop profiles and local management practices can vary. Verify recommendations with current soil analysis and qualified local agronomic advice before making planting decisions.
+- Crop suitability scores are relative heuristics, not yield estimates, probabilities or guarantees. Verify recommendations with current soil analysis and qualified local agronomic advice before making planting decisions.

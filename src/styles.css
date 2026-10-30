@@ -75,3 +75,91 @@ table{max-width:100%}
   .top-actions{gap:4px}
   .landing-hero{padding-left:15px;padding-right:15px}
 }
+
+/* CropMind UI refresh — append this file's contents to the END of src/styles.css.
+   This is an additive visual layer; it does not change React behavior or API routes. */
+:root {
+  --bg: #f5f7f1;
+  --surface: #ffffff;
+  --surface-2: #eef3e9;
+  --text: #203629;
+  --muted: #718074;
+  --line: #dfe8dc;
+  --forest: #27613b;
+  --lime: #b8d982;
+  --shadow: 0 14px 42px rgba(34, 65, 42, .075);
+}
+body { background: var(--bg); }
+h1, h2, h3 { letter-spacing: -.04em; }
+.sidebar { background: rgba(255,255,255,.94); backdrop-filter: blur(16px); }
+.nav-link { border-radius: 12px; min-height: 45px; }
+.nav-link.active { box-shadow: inset 3px 0 0 var(--forest); }
+.topbar { border-radius: 17px; box-shadow: 0 12px 32px rgba(35,63,40,.08); }
+.page-content { padding-top: clamp(25px, 3.5vw, 46px); }
+.card { border-radius: 19px; box-shadow: var(--shadow); }
+.metric-card, .chart-card, .form-card, .aside-card { border-radius: 18px; }
+.button { border-radius: 11px; min-height: 40px; }
+.button-primary { background: linear-gradient(135deg, #2e7045, #245a38); box-shadow: 0 7px 18px rgba(39,97,59,.18); }
+.button-primary:hover:not(:disabled) { background: #214f32; box-shadow: 0 10px 22px rgba(39,97,59,.22); }
+.field input, .field select, .search-box input,
+.setting-line input:not([type=checkbox]) { border-radius: 11px; min-height: 43px; }
+.field input:focus, .field select:focus, .search-box:focus-within {
+  border-color: #83ad70; box-shadow: 0 0 0 4px rgba(131,173,112,.14);
+}
+.hero { border-radius: 26px; background: linear-gradient(125deg, #1e422d, #315f3d 65%, #47734a); }
+.hero h1 { letter-spacing: -.06em; }
+.hero-copy > p { color: #dbe7d8; }
+.hero-visual { filter: saturate(.92); }
+.crop-tile { padding-top: 17px; padding-bottom: 17px; }
+.crop-symbol { border-radius: 14px; }
+.status { border-radius: 999px; padding: 6px 10px; }
+.disclaimer { border-radius: 14px; }
+.toast { border-radius: 14px; box-shadow: 0 18px 48px rgba(20,35,23,.16); }
+.landing { background: #f5f7f1; }
+.landing-nav { border-radius: 18px; }
+.landing-brand-mark { border-radius: 13px; }
+.landing-hero { padding-top: 76px; padding-bottom: 76px; }
+.landing-hero h1 { letter-spacing: -.065em; }
+.landing-hero-art { border-radius: 30px; box-shadow: 0 30px 70px rgba(38,79,46,.16); }
+.landing-feature { border-radius: 19px; box-shadow: 0 12px 34px rgba(34,65,42,.06); }
+.landing-feature:hover { transform: translateY(-5px); }
+.landing-bottom-cta { border-radius: 27px; background: linear-gradient(120deg, #214a32, #2d6540); }
+.footer { border-color: var(--line); }
+.dark {
+  --bg: #121b15;
+  --surface: #1b281e;
+  --surface-2: #243328;
+  --text: #edf4e9;
+  --muted: #a2b1a1;
+  --line: #344639;
+  --forest: #9bcea0;
+  --lime: #b8df82;
+  --shadow: 0 14px 42px rgba(0,0,0,.22);
+}
+.dark .sidebar, .dark .topbar { background: rgba(27,40,30,.94); }
+.dark .landing { background: #121b15; color: #edf4e9; }
+.dark .landing-nav, .dark .landing-feature, .dark .landing-insight-card,
+.dark .landing-hero-note { background: #1b281e; border-color: #344639; }
+.dark .landing-brand, .dark .landing-hero h1, .dark .landing-section-heading h2,
+.dark .landing-feature h3, .dark .landing-ribbon b { color: #edf4e9; }
+.dark .landing-lede, .dark .landing-section-heading > p,
+.dark .landing-feature p, .dark .landing-ribbon small { color: #a2b1a1; }
+@media (max-width: 900px) {
+  .page-content { padding-left: 20px; padding-right: 20px; }
+  .landing-hero { padding-top: 48px; padding-bottom: 52px; }
+}
+@media (max-width: 640px) {
+  .page-content { padding-left: 13px; padding-right: 13px; }
+  .card, .metric-card, .chart-card, .form-card { border-radius: 15px; }
+  .hero { border-radius: 19px; padding: 26px 22px; }
+  .landing-hero { padding-top: 35px; padding-bottom: 40px; }
+  .landing-hero-art { border-radius: 21px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
