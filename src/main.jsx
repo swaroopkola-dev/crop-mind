@@ -322,8 +322,18 @@ function AppRoutes(){
   const {authLoading,user}=useApp();
   const location=useLocation();
   if(authLoading)return <div className="boot-screen"><span className="brand-mark"><Sprout size={26}/></span><Loading label="Verifying your session…"/></div>;
+
+  // Signed-in users always enter the workspace; the public pages are for guests only.
   if(user && (location.pathname==='/' || location.pathname==='/login' || location.pathname==='/register'))return <Navigate to="/dashboard" replace/>;
-  if(location.pathname==='/')return <PublicOnly><LandingPage/></PublicOnly>;
+
+  // A guest may only see the public landing page and authentication screens.
+  if(!user){
+    if(location.pathname==='/')return <LandingPage/>;
+    if(location.pathname==='/login')return <AuthPage/>;
+    if(location.pathname==='/register')return <AuthPage mode="register"/>;
+    return <Navigate to="/" replace/>;
+  }
+
   return <Shell><Routes>
     <Route path="/dashboard" element={<RequireAuth><Home/></RequireAuth>}/>
     <Route path="/recommend" element={<RequireAuth><Recommend/></RequireAuth>}/>
@@ -341,7 +351,7 @@ function AppRoutes(){
     <Route path="/admin/health" element={<RequireAdmin><AdminHealth/></RequireAdmin>}/>
     <Route path="/admin/demo" element={<RequireAdmin><AdminDemo/></RequireAdmin>}/>
     <Route path="/admin/settings" element={<RequireAdmin><AdminSettings/></RequireAdmin>}/>
-    <Route path="*" element={<NotFound/>}/>
+    <Route path="*" element={<Navigate to="/dashboard" replace/>}/>
   </Routes></Shell>;
 }
 function App(){return <BrowserRouter><AppProvider><AppRoutes/></AppProvider></BrowserRouter>;}
